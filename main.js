@@ -13,9 +13,9 @@ var connect = function (socket, callback) {
 	socket.addEventListener("message", _handleMessage);
 	socket.send("CAPAB QS EX CHW IE KNOCK SAVE EUID ENCAP");
 	socket.send(`PASS ${config.send_password} TS 6 ${config.sid}`);
-	socket.send(`SERVER ${config.serverName} 1 ${config.description}`)
+	socket.send(`SERVER ${config.server_name} 1 ${config.description}`)
 };
-const socket = new WebSocket(config.wsUrl);
+const socket = new WebSocket(config.ws_url);
 socket.addEventListener("open", function() {
 	connect(socket, function() {
 		console.log("Connected!");
