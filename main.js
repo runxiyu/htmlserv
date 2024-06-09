@@ -11,9 +11,10 @@ var connect = function (socket, callback) {
 		}
 	};
 	socket.addEventListener("message", _handleMessage);
-	socket.send("CAPAB QS EX CHW IE KNOCK SAVE EUID ENCAP");
-	socket.send(`PASS ${config.send_password} TS 6 ${config.sid}`);
-	socket.send(`SERVER ${config.server_name} 1 ${config.description}`)
+	socket.send("CAPAB START 1205");
+	socket.send("CAPAB END");
+	socket.send(`SERVER ${config.server_name} ${config.send_password} 0 ${config.sid} :${config.description}`)
+	socket.send(`:${config.sid} BURST ${Math.floor(Date.now()/1000)}`)
 };
 const socket = new WebSocket(config.ws_url);
 socket.addEventListener("open", function() {
