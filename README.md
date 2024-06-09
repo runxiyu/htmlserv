@@ -7,9 +7,21 @@ first project in that environment.
 
 Forked from [9pfs/hello-smile6's attempt for solanum](https://github.com/hello-smile6/html5-solanum-s2s-implementation/).
 
-For a slightly more usable pseudo-server, consider HaxServ ([git.andrewyu.org](https://git.andrewyu.org/hax/coupserv.git)/[sr.ht](https://git.sr.ht/~runxiyu/haxserv)/[GitHub](https://github.com/runxiyu/haxserv)).
+## Comparison with HaxServ
+
+HaxServ ([git.andrewyu.org](https://git.andrewyu.org/hax/coupserv.git)/[sr.ht](https://git.sr.ht/~runxiyu/haxserv)/[GitHub](https://github.com/runxiyu/haxserv)) is a (probably more usable) InspIRCd-linking pseudo-server written by Test\_User.
+
+
+| |HaxServ|HTMLServ|
+|-|-------|--------|
+|Language|C|JavaScript ES6|
+|Connection method|GnuTLS|WebSocket|
+|Environment|Native UNIX-like|Web browser|
+|Chaos level|UNIXly chaotic|Webdev-style chaos|
+|Commands|Many|Few|
 
 ## InspIRCd configuration
+
 ```xml
 <link name="htmlserv.irc.andrewyu.org"
 	ipaddr="irc.andrewyu.org" # dummy
@@ -23,6 +35,8 @@ For a slightly more usable pseudo-server, consider HaxServ ([git.andrewyu.org](h
 	sendpass="changeme"
 	recvpass="changeme">
 
+<module name="websocket">
+
 <bind address=""
 	port="7890"
 	type="servers"
@@ -31,3 +45,5 @@ For a slightly more usable pseudo-server, consider HaxServ ([git.andrewyu.org](h
 
 <wsorigin allow="http://localhost:5000"> # whatever the Origin header of the request will be
 ```
+
+Of course, ensure that you have a `sslprofile` called `Servers`.
