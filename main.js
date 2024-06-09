@@ -47,7 +47,12 @@ var connect = function(socket, callback) {
 	socket.send("CAPAB START 1205");
 	socket.send("CAPAB END");
 	socket.send(`SERVER ${config.server_name} ${config.send_password} 0 ${config.sid} :${config.description}`);
-	socket.send(`BURST ${Math.floor(Date.now() / 1e3)}`);
+	socket.send(`BURST ${Math.floor(Date.now() / 1000)}`);
+	socket.send(`:${config.sid} UID ${config.sid}${config.main_uid_without_sid} ${config.main_nick_ts} ${config.main_nick} ${config.main_real_host} ${config.main_host} ${config.main_ident} ${config.main_addr} ${config.main_user_ts} ${config.main_umode} :${config.main_gecos}`);
+	config.main_join_channels.forEach((channel_name) => {
+		socket.send(`:${config.sid} FJOIN ${channel_name} ${config.main_user_ts} + :${config.main_channel_mode_on_join},${config.sid}${config.main_uid_without_sid}`)
+		socket.send(`:${config.sid} MODE ${channel_name} +${config.main_channel_mode_after_join} :${config.sid}${config.main_uid_without_sid}`);
+	});
 	socket.send("ENDBURST");
 };
 
@@ -55,6 +60,5 @@ const socket = new WebSocket(config.ws_url);
 
 socket.addEventListener("open", function() {
 	connect(socket, function() {
-		console.log("Connected!");
 	});
 });
