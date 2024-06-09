@@ -1,6 +1,12 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * Copyright (c) 2024 Runxi Yu <me@runxiyu.org>
+ * Copyright (c) 2022 hello-smile6
+ */
+
 import config from "./config.js";
 
-var connect = function (socket, callback) {
+var connect = function(socket, callback) {
 	var _handleMessage = (event) => {
 		let msg = new String(event?.data);
 		let prefix = null;
