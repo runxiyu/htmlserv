@@ -4,7 +4,7 @@
  * Copyright (c) 2022 hello-smile6
  */
 
-const config={
+const config = {
 	sid: "1F7",
 	send_password: "changeme",
 	accept_password: "changeme",
