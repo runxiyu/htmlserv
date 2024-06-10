@@ -10,12 +10,22 @@ var connect = function(socket, callback) {
 	var _handleMessage = event => {
 		let msg = new String(event?.data);
 		let prefix = null;
+		// msg is a string
+		if (msg[0] == "@") {
+			// TODO: Actually read IRCv3 tags instead of discarding them
+			let firstSpaceIndex = msg.indexOf(' ');
+			if (firstSpaceIndex == -1) {
+				socket.send(`:${config.sid} ERROR :IRCv3 tag, but no space`)
+			} else {
+				msg = msg.slice(firstSpaceIndex + 1);
+			}
+		}
 		if (msg[0] == ":") {
 			let temp_array_one = msg.split(" ");
 			let temp_array_two = temp_array_one.splice(0, 1);
 			temp_array_two.push(temp_array_one.join(" "));
-			let prefix_with_colon = temp_array_two[0];
-			prefix = prefix_with_colon.slice(1, prefix_with_colon.length);
+			let prefix_coloned = temp_array_two[0];
+			prefix = prefix_coloned.slice(1, prefix_coloned.length);
 			msg = temp_array_two[1];
 		}
 		let msg_array = msg.split(" ");
@@ -32,6 +42,9 @@ var connect = function(socket, callback) {
 					socket.send(`:${config.sid} ERROR :Got PING intended for ${msg_array[1].trim()}`);
 					return;
 				}
+				if (!prefix) {
+					socket.send(`:${config.sid} ERROR :Got PING with one argument without prefix`);
+				}
 				socket.send(`:${config.sid} PONG :${prefix}`);
 				return;
 			} else if (msg_array.length == 3) {
@@ -40,6 +53,41 @@ var connect = function(socket, callback) {
 			} else {
 				socket.send(`:${config.sid} ERROR :msg_array.length`);
 				return;
+			}
+		} else if (msg_array[0] == "PRIVMSG") {
+			if (!prefix) {
+				socket.send(`:${config.sid} ERROR :Got PRIVMSG without prefix`);
+			}
+			let reply_to = config.main_join_channels[0];
+			if (msg_array[1].startsWith("#")) {
+				if (!config.main_join_channels.includes(msg_array[1])) {
+					return;
+				}
+				if (!msg_array[2].startsWith(`${config.main_nick}: `)) {
+					return;
+				}
+				msg_array[2] = msg_array[2].slice(`${config.main_nick}: `.length);
+				reply_to = msg_array[1];
+			} else if (msg_array[1] == `${config.sid}${config.main_uid_without_sid}`) {
+				reply_to = prefix;
+			} else {
+				return;
+			}
+			let cmd_array = msg_array[2].split(" ");
+			for (let i = 0; i < cmd_array.length; i++) {
+				if (cmd_array[i].startsWith(":")) {
+					cmd_array[i] = cmd_array[i].substring(1) + " " + cmd_array.slice(i + 1).join(" ");
+					cmd_array.splice(i + 1);
+					break;
+				}
+			}
+			cmd_array[0] = cmd_array[0].toUpperCase();
+			switch (cmd_array[0]) {
+				case "HELP":
+					socket.send(`:${config.sid}${config.main_uid_without_sid} NOTICE ${reply_to} :Hi! I am an instance of https://git.sr.ht/~runxiyu/htmlserv/, an ultra-cursed joke InspIRCd pseudoserver written in JavaScript that runs in a web browser and connects via WebSocket.`);
+					break;
+				default:
+					socket.send(`:${config.sid}${config.main_uid_without_sid} NOTICE ${reply_to} :Unknown command: ${cmd_array[0]}`);
 			}
 		}
 	};
