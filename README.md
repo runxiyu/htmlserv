@@ -7,13 +7,13 @@ first project in that environment.
 
 Forked from [9pfs/hello-smile6's attempt for solanum](https://github.com/hello-smile6/html5-solanum-s2s-implementation/).
 
-## Comparison with HaxServ
+## Comparison with CoupServ
 
-HaxServ ([git.andrewyu.org](https://git.andrewyu.org/hax/coupserv.git)/[sr.ht](https://git.sr.ht/~runxiyu/haxserv)/[GitHub](https://github.com/runxiyu/haxserv)) is a (probably more usable) InspIRCd-linking pseudo-server written by Test\_User.
+CoupServ ([git.andrewyu.org](https://git.andrewyu.org/hax/coupserv.git)/[sr.ht](https://git.sr.ht/~runxiyu/coupserv)/[GitHub](https://github.com/runxiyu/coupserv)) is a (probably more usable) InspIRCd-linking pseudo-server written by Test\_User.
 
 
-| |HaxServ|HTMLServ|
-|-|-------|--------|
+| |CoupServ|HTMLServ|
+|-|--------|--------|
 |Language|C|JavaScript ES6|
 |Connection method|GnuTLS|WebSocket|
 |Environment|Native UNIX-like|Web browser|
