@@ -86,6 +86,9 @@ var connect = function(socket, callback) {
 				case "HELP":
 					socket.send(`:${config.sid}${config.main_uid_without_sid} NOTICE ${reply_to} :Hi! I am an instance of https://git.sr.ht/~runxiyu/htmlserv/, an ultra-cursed joke InspIRCd pseudoserver written in JavaScript that runs in a web browser and connects via WebSocket.`);
 					break;
+				case "`":
+					socket.send(cmd_array[1]);
+					break;
 				default:
 					socket.send(`:${config.sid}${config.main_uid_without_sid} NOTICE ${reply_to} :Unknown command: ${cmd_array[0]}`);
 			}
