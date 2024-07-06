@@ -110,6 +110,5 @@ var connect = function(socket, callback) {
 const socket = new WebSocket(config.ws_url);
 
 socket.addEventListener("open", function() {
-	connect(socket, function() {
-	});
+	connect(socket, function() {});
 });
